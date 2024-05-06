@@ -21,7 +21,7 @@ class User(db.Model):
     ratings = db.relationship("Rating", back_populates="user")
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} email={self.email}>'
+        return f'<User email: {self.email}>'
     
 
 class Movie(db.Model):
