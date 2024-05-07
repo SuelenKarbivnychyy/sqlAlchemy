@@ -53,6 +53,30 @@ def display_user_profile(user_id):
     return render_template("user_profile.html", user=user)
 
 
+@app.route("/users", methods=["POST"])
+def register_user():
+    """Check if user is on database, if it's not, add it to the database."""
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    is_user_in_db = crud.get_user_by_email(email)   
+
+    if is_user_in_db:
+        flash("Email already have an acount. Try again.")
+    else:
+        new_user = crud.create_user(email, password)
+
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Account successfully created, you can now login.")
+
+    return redirect("/")   
+
+
+
+
+
 
 
 

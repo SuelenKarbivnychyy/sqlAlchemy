@@ -21,11 +21,22 @@ def get_all_users():
 
 
 def get_user_by_id(user_id):
-    """Get a user by id"""
+    """Get a user by id and return it"""
 
     user = User.query.get(user_id)
 
     return user
+
+
+def get_user_by_email(user_email):
+    """Get an user by email and return it"""
+
+    user = User.query.filter(User.email == user_email).first()
+   
+    
+    if user:
+        return user
+    
 
 
 def create_movie(title, overview, release_date, poster_path):
@@ -45,6 +56,7 @@ def get_all_movies():
     movies = Movie.query.all()
 
     return movies
+
 
 
 def get_movie_by_id(movie_id):
