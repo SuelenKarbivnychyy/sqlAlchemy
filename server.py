@@ -35,6 +35,20 @@ def display_movie_details(movie_id):
     return render_template("movie_details.html", movie=movie)
 
 
+
+@app.route("/movies/<movie_id>", methods=["POST"])
+def rate_a_movie(movie_id):
+    """Rate a movie and save it to the database"""
+
+    # movie = crud.get_movie_by_id(movie_id)
+    # user = session['user']
+    # rate = request.form.get("movie-rate")
+
+    # user_rate = db.session.add()
+
+
+
+
 @app.route("/all_users")
 def display_all_users():
     """Display all users from database."""
@@ -60,9 +74,9 @@ def register_user():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    is_user_in_db = crud.get_user_by_email(email)   
+    user = crud.get_user_by_email(email)   
 
-    if is_user_in_db:
+    if user:
         flash("Email already have an acount. Try again.")
     else:
         new_user = crud.create_user(email, password)
@@ -71,7 +85,27 @@ def register_user():
         db.session.commit()
         flash("Account successfully created, you can now login.")
 
-    return redirect("/")   
+    return redirect("/")
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    """Login the user to the page"""
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    user = crud.get_user_by_email(email)
+
+    if user.password == password:
+        flash("Logged in!")
+        user_in_session = session['user'] = user.user_id
+    else:
+        flash("Wrong password. Please try again.")     
+
+    return redirect("/")     
+
+    
 
 
 
