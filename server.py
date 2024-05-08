@@ -36,16 +36,29 @@ def display_movie_details(movie_id):
 
 
 
-@app.route("/movies/<movie_id>", methods=["POST"])
+@app.route("/movies/<movie_id>/rate_movie", methods=["POST"])
 def rate_a_movie(movie_id):
-    """Rate a movie and save it to the database"""
+    """Rate a movie and save it to the database"""    
+    
+    user_email = session['user_email']
+    score = request.form.get("rating")    
 
-    # movie = crud.get_movie_by_id(movie_id)
-    # user = session['user']
-    # rate = request.form.get("movie-rate")
+    if not user_email:
+        flash("You have to log in")
+    elif not score:
+        flash("You have to select a rate")    
+    else:
+        movie = crud.get_movie_by_id(movie_id)
+        user = crud.get_user_by_email(user_email)
 
-    # user_rate = db.session.add()
+        rating = crud.create_a_rate(user, movie, int(score))
 
+        db.session.add(rating)
+        db.session.commit()    
+
+        flash("Thank you for rating this movie")
+
+    return redirect(f"/movies/{movie_id}")
 
 
 
@@ -73,7 +86,6 @@ def register_user():
 
     email = request.form.get("email")
     password = request.form.get("password")
-
     user = crud.get_user_by_email(email)   
 
     if user:
@@ -97,13 +109,18 @@ def login():
 
     user = crud.get_user_by_email(email)
 
-    if user.password == password:
+    print(f'################### {user}')
+
+    if user == None:
+        flash("You need to create an account")
+    elif user.password == password:
         flash("Logged in!")
         user_in_session = session['user'] = user.user_id
+        print(f'######################## User in session: {user_in_session}')
     else:
         flash("Wrong password. Please try again.")     
 
-    return redirect("/")     
+    return redirect("/")
 
     
 

@@ -68,7 +68,7 @@ def get_movie_by_id(movie_id):
 
 
 
-def rating_a_movie(user, movie, score):
+def create_a_rate(user, movie, score):
     """Create and return a Movie rating."""
 
     rating = Rating(user=user, movie=movie, score=score)

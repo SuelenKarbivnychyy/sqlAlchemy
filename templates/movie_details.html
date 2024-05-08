@@ -9,22 +9,31 @@
   {{ movie.overview }}
 </p>
 
-<p>
-  <h2>Rate this movie</h2>
-  <form action="/movie-rate" method="POST">    
-    <label for="leng-select">Choose a rate for this movie:</label>
-      <select name="lang" id="lang-select">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
+<div>
 
-      <input type="submit"/>
-  </form>
-</p>
+  {% if session.get('user_email') %}
+
+    <h2>Rate this movie</h2>
+    <p>{{movie.title}}</p>
+
+    <form action="/movies/{{ movie.movie_id }}/rate_movie" method="POST">    
+        <label for="leng-select">Choose a rate for this movie:</label>
+        <select name="rating" id="lang-select">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <input type="submit"/>
+    </form>
+
+  {% endif %} 
+</div>   
+
+<!-- <p> <a href ="/movies/{{movie.movie_id}}/rate_movie">Click here to Rate this movie</a></p> -->
 
 <img src="{{ movie.poster_path }}">
 {% endblock %}
