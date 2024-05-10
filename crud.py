@@ -76,6 +76,15 @@ def create_a_rate(user, movie, score):
     return rating
 
 
+def get_rate_by_user_id(user_id):
+    """Get a rate from database by user id and return it"""
+
+    rate = Rating.query.filter(Rating.user_id == user_id)
+
+    if rate:
+        return rate
+
+
 
 
 

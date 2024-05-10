@@ -61,6 +61,26 @@ def rate_a_movie(movie_id):
     return redirect(f"/movies/{movie_id}")
 
 
+@app.route("/movies/<movie_id>/rate_movie", methods=["POST"])
+def update_rating(movie_id):
+    """Update an specific movie"""
+
+    user_id = session("user_id")
+    user = crud.get_user_by_id(user_id)
+    rating = crud.get_rate_by_user_id(user_id)
+
+    print(f"################## rate from db {rating}")
+
+    new_score = request.form.get("rating")
+
+    if rating:
+        flash(f"You've rated this movie as: {rating} points")
+        rate = crud.create_a_rate(user.user_id, movie_id, new_score)
+        db.session.add(rate)
+        db.session.commit()
+
+    return (f"/movies/{movie_id}")
+
 
 @app.route("/all_users")
 def display_all_users():
